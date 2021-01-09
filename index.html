@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div style="width: 20%;height: 20%;border: solid black 1px;position: absolute;top:40%;left:40%;">
+        <input style="width: 100%;" id="username" placeholder="username">
+        <input style="width: 100%;" id="password" placeholder="password">
+        <button id="login">Login</button>
+    </div>
+    
+    <button id="send">Send</button>
+    <textarea id="text"></textarea>
+    <div id="chatbox" style="width: 500px;height: 500px;border: solid black 1px;overflow-y: scroll;"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let cusername = document.getElementById('username');
+    let cpassword = document.getElementById('password');
+    let ctext = document.getElementById('text');
+    let chatbox = document.getElementById('chatbox')
+    let croomcode;
+    var socket = io();
+    document.getElementById('login').addEventListener('click', (ev)=>{
+        socket.emit('login', {
+            username : cusername.value,
+            password : cpassword.value,
+        } );
+    })
+    socket.on(`loginstate`,(data) => {
+        croomcode = data;
+        console.log(croomcode)
+    })
+
+    document.getElementById('send').addEventListener('click', (ev)=>{
+        socket.emit("message", ctext.value,);
+    })
+    socket.on('getMessage',(msg)=>{
+        console.log(msg)
+        chatbox.innerHTML = ''
+        chatbox.innerHTML += `
+        <h3>${msg.roomcode}<h3>
+        `
+        msg.data.forEach(message => {
+            chatbox.innerHTML += `<p>${message.sender}:${message.message}</p>`
+        });
+    })
+
+</script>
+</html>
