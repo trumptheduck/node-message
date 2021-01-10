@@ -58,6 +58,6 @@ io.on('connection', (socket) => {
     fs.writeFileSync('./data/users.json', usersData); 
     console.log("Data saved!")
   },10000)
-http.listen(3000, () => {
-    console.log('listening on *:3000');
+http.listen(8080, () => {
+    console.log('listening on *:8080');
   });
