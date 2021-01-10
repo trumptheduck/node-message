@@ -1,6 +1,7 @@
 const app = require('express')();
+const http = require('http').Server(app);
 const path = require("path")
-const io = require('socket.io')();
+const io = require('socket.io')(http);
 const fs = require('fs');
 let usersRawdata = fs.readFileSync('./data/users.json');
 let roomsRawdata = fs.readFileSync('./data/rooms.json');
@@ -57,6 +58,6 @@ io.on('connection', (socket) => {
     fs.writeFileSync('./data/users.json', usersData); 
     console.log("Data saved!")
   },10000)
-app.listen(3000, () => {
+http.listen(3000, () => {
     console.log('listening on *:3000');
   });
