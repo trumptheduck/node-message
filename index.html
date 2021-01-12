@@ -6,6 +6,10 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <style>
         body {
             overflow: hidden;
@@ -20,15 +24,16 @@
     </style>
 </head>
 <body>
-    <div id="login-box" style="z-index: 10;width: 50%;height: 20%;border: solid black 1px;position: absolute;top:30%;left:25%;background-color: greenyellow;border-radius: 5px;">
-        <input id="username" placeholder="Tên đăng nhập">
-        <input id="password" placeholder="Mật khẩu">
-        <button id="login" style="margin: 5px;">Đăng nhập</button>
+    <div id="login-box" style="z-index: 10;width: 50%;height: 20%;position: absolute;top:30%;left:25%;">
+        <h5 style="margin-left:10px">Đăng nhập</h5>
+        <input id="username" style="margin: 5px;" class="form-control" placeholder="Tên đăng nhập">
+        <input id="password" style="margin: 5px;" class="form-control" placeholder="Mật khẩu">
+        <button id="login" class="btn btn-primary" style="margin: 5px;">Đăng nhập</button>
     </div>
     <section id="messenger" style="display: none;">
     <div id="chatbox" style="position: absolute;top: 10%;left: 0px;width: 100%;height: 80%;overflow-y: scroll;"></div>
-    <textarea id="text" style="position: absolute;top: 90%;left: 0%;width: 79%;border: solid black 1px;height: 10%;"></textarea>
-    <button id="send" style="position: absolute;top: 90%;left: 80%;width: 21%;height: 11%;;">Gửi</button>
+    <textarea class="form-control" id="text" style="position: absolute;top: 90%;left: 0%;width: 79%;border: solid black 1px;height: 10%;"></textarea>
+    <button id="send" class="btn btn-primary" style="position: absolute;top: 90%;left: 80%;width: 21%;height: 11%;;">Gửi</button>
     </section>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -63,27 +68,17 @@
         chatbox.innerHTML = ''
         chatbox.innerHTML += `
         <div style="position:fixed; top:0%; left:0%;width:100%; background-color:white;filter: invert(1);z-index:15;">
-        <h3 style="padding:5px">Mã phòng: ${msg.roomcode}<h3>
+        <h5 style="padding:5px">: ${msg.list.find(user => user !== cusername.value)}<h5>
             </div>
         `
-        msg.data.forEach(message => {
+        msg.data.data.forEach(message => {
             if(message.sender === cusername.value) {
-            chatbox.innerHTML += `<p style="position:relative; left:10%; width:80%;border:solid black 1px; border-radius:10px;padding:10px;text-align:right;word-wrap: break-word;background-color:white;filter: invert(1);">${message.sender}:${message.message}</p>`
+            chatbox.innerHTML += `<p style="position:relative; left:10%; width:80%;border:solid black 1px; border-radius:10px;padding:10px;text-align:right;word-wrap: break-word;background-color:black;color:white;">${message.sender}:${message.message}</p>`
             } else {
             chatbox.innerHTML += `<p style="position:relative; left:0%; width:80%;border:solid black 1px; border-radius:10px;padding:10px;text-align:left;word-wrap: break-word;">${message.sender}:${message.message}</p>`
             }
             
         });
     })
-    setInterval(()=>{
-                socket.emit('update')
-            },100)
-    setTimeout(function () {
-    var viewheight = $(window).height();
-    var viewwidth = $(window).width();
-    var viewport = $("meta[name=viewport]");
-    viewport.attr("content", "height=" + viewheight + "px, width=" + 
-    viewwidth + "px, initial-scale=1.0");
-}, 300);
 </script>
 </html>

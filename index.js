@@ -24,8 +24,12 @@ io.on('connection', (socket) => {
           if(user.password === data.password) {
             console.log("Login successful");
             socket.emit('loginstate',true)
-            let chat = chatData.find(chat => chat.roomcode = user.roomcode);
-            socket.emit('getMessage',chat)
+            let chat = chatData.find(chat => chat.roomcode === user.roomcode);
+            let roomList = users.find(user => user.roomcode === chat.roomcode)
+            socket.emit('getMessage',{
+              data : chat,
+              list: roomList
+            })
             socket.on('message',(msg)=>{
               chat.data.push({
                 sender: user.username,
@@ -58,6 +62,6 @@ io.on('connection', (socket) => {
     fs.writeFileSync('./data/users.json', usersData); 
     console.log("Data saved!")
   },10000)
-http.listen(3000, () => {
-    console.log('listening on *:3000');
+http.listen(80, () => {
+    console.log('listening on *:80');
   });
